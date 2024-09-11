@@ -1,41 +1,46 @@
-require_relative 'display.rb'
+# frozen_string_literal: true
+
+require_relative 'display'
 
 class Game
   include Display
   def initialize
     puts display_intro
-    @secret_code = generate_secret_code()
+    @secret_code = generate_secret_code
     @move = 0
     @max_moves = 12
   end
-  COLORS = [:red, :blue, :green, :yellow, :orange, :purple].freeze
+  COLORS = %i[red blue green yellow orange purple].freeze
 
   def run
     loop do
       @move += 1
       puts display_move_number(@move)
-      player_guess = get_player_guess()
-      
+      player_guess = guess_from_player
+
       if player_guess == @secret_code
-        puts display_winning_message;break
+        puts display_winning_message
+        break
       elsif @move >= @max_moves
-        puts display_game_over(@secret_code);break
+        puts display_game_over(@secret_code)
+        break
       end
-      
+
       exact_matches, color_matches = feedback(player_guess)
       puts display_feedback(exact_matches, color_matches)
     end
   end
-  
+
   def generate_secret_code
     COLORS.sample(4)
   end
 
-  def get_player_guess
+  def guess_from_player
     puts display_guess_helper_message
     loop do
-      guesses = gets.chomp.downcase.split(" ").map(&:to_sym)
-      return guesses if valid_input?(guesses)      
+      guesses = gets.chomp.downcase.split(' ').map(&:to_sym)
+      return guesses if valid_input?(guesses)
+
       puts display_input_warning
     end
   end
@@ -45,9 +50,6 @@ class Game
   end
 
   def feedback(guess)
-    exact_matches = 0
-    color_matches = 0
-
     secret_code_copy = @secret_code.dup
     guess_copy = guess.dup
 
@@ -56,6 +58,6 @@ class Game
     # Check for color matches
     color_matches = guess_copy.count { |color| color && secret_code_copy.include?(color) }
 
-    return exact_matches,color_matches
+    [exact_matches, color_matches]
   end
 end
