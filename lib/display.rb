@@ -27,4 +27,8 @@ module Display
       "\n>> MOVE #{number} <<"
     end
 
+    def display_feedback(exact_matches,color_matches)
+      ">> Feedback: you have #{exact_matches} exact matches and #{color_matches} color matches"
+    end
+
 end

@@ -22,7 +22,7 @@ class Game
         puts display_game_over(@secret_code);break
       end
       
-      puts feedback(player_guess)
+      puts display_feedback(feedback(player_guess))
     end
   end
   
@@ -55,6 +55,6 @@ class Game
     # Check for color matches
     color_matches = guess_copy.count { |color| color && secret_code_copy.include?(color) }
 
-    ">> Feedback: you have #{exact_matches} exact matches and #{color_matches} color matches"
+    return exact_matches,color_matches
   end
 end
