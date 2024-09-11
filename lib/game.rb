@@ -6,8 +6,9 @@ class Game
     puts display_intro
     @secret_code = generate_secret_code()
     @move = 0
-    @last_move = 3
+    @max_moves = 10
   end
+  COLORS = [:red, :blue, :green, :yellow, :orange, :purple].freeze
 
   def run
     loop do
@@ -16,28 +17,17 @@ class Game
       player_guess = get_player_guess()
       
       if player_guess == @secret_code
-        puts display_winning_message
-        break
-      end
-      
-      if @move >= @last_move
-        puts display_game_over(@secret_code)
-        break
+        puts display_winning_message;break
+      elsif @move >= @max_moves
+        puts display_game_over(@secret_code);break
       end
       
       puts feedback(player_guess)
     end
   end
   
-  COLORS = [:red, :blue, :green, :yellow, :orange, :purple].freeze
-  # Generates a secret code for the game.
-  #
-  # This method randomly selects four colors from the available COLORS and returns them as the secret code.
-  #
-  # @return [Array] The secret code, represented as an array of four colors.
   def generate_secret_code
-    result = COLORS.sample(4)
-    return result
+    COLORS.sample(4)
   end
 
   def get_player_guess
@@ -67,5 +57,4 @@ class Game
 
     ">> Feedback: you have #{exact_matches} exact matches and #{color_matches} color matches"
   end
-
 end
