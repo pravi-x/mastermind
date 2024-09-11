@@ -11,21 +11,20 @@ class Game
 
   def run
     loop do
-      # input guess from user
       @move += 1
       puts display_move_number(@move)
-      player_guess = get_player_guess() 
-      # check if the player won
+      player_guess = get_player_guess()
+      
       if player_guess == @secret_code
-        puts display_wining_message
+        puts display_winning_message
         break
       end
-      # check if the player lost
+      
       if @move >= @last_move
         puts display_game_over(@secret_code)
         break
-      end      
-      # provide feedback
+      end
+      
       puts feedback(player_guess)
     end
   end
@@ -62,23 +61,11 @@ class Game
     guess_copy = guess.dup
 
     # Check for exact matches
-    guess_copy.each_with_index do |color, index|
-      if color == secret_code_copy[index]
-        exact_matches += 1
-        secret_code_copy[index] = nil
-        guess_copy[index] = nil
-      end
-    end
-
+    exact_matches = guess_copy.each_with_index.count { |color, index| color == secret_code_copy[index] }
     # Check for color matches
-    guess_copy.each do |color|
-      if color && secret_code_copy.include?(color)
-        color_matches += 1
-        secret_code_copy[secret_code_copy.index(color)] = nil
-      end
-    end
+    color_matches = guess_copy.count { |color| color && secret_code_copy.include?(color) }
 
-    return ">> Feedback: you have #{exact_matches} exact matches and #{color_matches} color matches"
+    ">> Feedback: you have #{exact_matches} exact matches and #{color_matches} color matches"
   end
 
 end
