@@ -6,7 +6,7 @@ class Game
     puts display_intro
     @secret_code = generate_secret_code()
     @move = 0
-    @max_moves = 10
+    @max_moves = 12
   end
   COLORS = [:red, :blue, :green, :yellow, :orange, :purple].freeze
 
@@ -22,7 +22,8 @@ class Game
         puts display_game_over(@secret_code);break
       end
       
-      puts display_feedback(feedback(player_guess))
+      exact_matches, color_matches = feedback(player_guess)
+      puts display_feedback(exact_matches, color_matches)
     end
   end
   

@@ -1,10 +1,12 @@
 module Display
     def display_intro
-      ">> Welcome to the mastermind game <<\n"
+      ">> Welcome to the mastermind game <<\n" \
+      
     end
 
     def display_guess_helper_message
-      ">> Make a guess! Write the 4 colors that you think will break the code\n>> Acceptable colors are red, blue, green, yellow, orange and purple <<"
+      ">> Make a guess! Write the 4 colors that you think will break the code <<" \
+      ">> Acceptable colors are red, blue, green, yellow, orange and purple <<"
     end
 
     def display_input_warning
