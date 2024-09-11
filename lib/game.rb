@@ -3,36 +3,82 @@ require_relative 'display.rb'
 class Game
   include Display
   def initialize
-    @secret_code = generate_secret_code
+    puts display_intro
+    @secret_code = generate_secret_code()
+    @move = 0
+    @last_move = 3
   end
 
-  
   def run
-    # input guess from user
-    #player_guess = get_player_guess() 
-    # feedback
-    
+    loop do
+      # input guess from user
+      @move += 1
+      puts display_move_number(@move)
+      player_guess = get_player_guess() 
+      # check if the player won
+      if player_guess == @secret_code
+        puts display_wining_message
+        break
+      end
+      # check if the player lost
+      if @move >= @last_move
+        puts display_game_over(@secret_code)
+        break
+      end      
+      # provide feedback
+      puts feedback(player_guess)
+    end
   end
   
   COLORS = [:red, :blue, :green, :yellow, :orange, :purple].freeze
+  # Generates a secret code for the game.
+  #
+  # This method randomly selects four colors from the available COLORS and returns them as the secret code.
+  #
+  # @return [Array] The secret code, represented as an array of four colors.
   def generate_secret_code
     result = COLORS.sample(4)
-    puts result
     return result
   end
 
   def get_player_guess
     puts display_guess_helper_message
     loop do
-      guesses = gets.chomp.split(" ").map(&:to_sym)
-      return guesses if valid_input?(guesses)
-      
+      guesses = gets.chomp.downcase.split(" ").map(&:to_sym)
+      return guesses if valid_input?(guesses)      
       puts display_input_warning
     end
   end
 
   def valid_input?(guesses)
     guesses.length == 4 && guesses.all? { |guess| COLORS.include?(guess) }
+  end
+
+  def feedback(guess)
+    exact_matches = 0
+    color_matches = 0
+
+    secret_code_copy = @secret_code.dup
+    guess_copy = guess.dup
+
+    # Check for exact matches
+    guess_copy.each_with_index do |color, index|
+      if color == secret_code_copy[index]
+        exact_matches += 1
+        secret_code_copy[index] = nil
+        guess_copy[index] = nil
+      end
+    end
+
+    # Check for color matches
+    guess_copy.each do |color|
+      if color && secret_code_copy.include?(color)
+        color_matches += 1
+        secret_code_copy[secret_code_copy.index(color)] = nil
+      end
+    end
+
+    return ">> Feedback: you have #{exact_matches} exact matches and #{color_matches} color matches"
   end
 
 end
