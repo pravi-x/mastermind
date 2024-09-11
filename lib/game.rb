@@ -2,6 +2,7 @@
 
 require_relative 'display'
 
+# The game class
 class Game
   include Display
   def initialize
@@ -17,18 +18,34 @@ class Game
       @move += 1
       puts display_move_number(@move)
       player_guess = guess_from_player
+      break if end?(player_guess)
 
-      if player_guess == @secret_code
-        puts display_winning_message
-        break
-      elsif @move >= @max_moves
-        puts display_game_over(@secret_code)
-        break
-      end
-
-      exact_matches, color_matches = feedback(player_guess)
-      puts display_feedback(exact_matches, color_matches)
+      feedback(player_guess)
     end
+  end
+
+  def end?(guess)
+    if guess == @secret_code
+      puts display_winning_message
+      true
+    elsif @move >= @max_moves
+      puts display_game_over(@secret_code)
+      true
+    else
+      false
+    end
+  end
+
+  def feedback(guess)
+    secret_code_copy = @secret_code.dup
+    guess_copy = guess.dup
+
+    # Check for exact matches
+    exact_matches = guess_copy.each_with_index.count { |color, index| color == secret_code_copy[index] }
+    # Check for color matches
+    color_matches = guess_copy.count { |color| color && secret_code_copy.include?(color) }
+
+    puts display_feedback(exact_matches, color_matches)
   end
 
   def generate_secret_code
@@ -47,17 +64,5 @@ class Game
 
   def valid_input?(guesses)
     guesses.length == 4 && guesses.all? { |guess| COLORS.include?(guess) }
-  end
-
-  def feedback(guess)
-    secret_code_copy = @secret_code.dup
-    guess_copy = guess.dup
-
-    # Check for exact matches
-    exact_matches = guess_copy.each_with_index.count { |color, index| color == secret_code_copy[index] }
-    # Check for color matches
-    color_matches = guess_copy.count { |color| color && secret_code_copy.include?(color) }
-
-    [exact_matches, color_matches]
   end
 end
