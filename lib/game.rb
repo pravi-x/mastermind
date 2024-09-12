@@ -49,7 +49,11 @@ class Game
   end
 
   def generate_secret_code
-    COLORS.sample(4)
+    c1 = COLORS.sample(1)
+    c2 = COLORS.sample(1)
+    c3 = COLORS.sample(1)
+    c4 = COLORS.sample(1)    
+    [c1,c2,c3,c4]
   end
 
   def guess_from_player
