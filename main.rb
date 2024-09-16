@@ -2,4 +2,4 @@
 
 require_relative 'lib/game'
 
-Game.new.run
+Game.new.main_menu
