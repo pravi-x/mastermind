@@ -75,6 +75,7 @@ class Game
     c3 = COLORS.sample(1)
     c4 = COLORS.sample(1)
     [c1, c2, c3, c4]
+    # %i[red blue green yellow]
   end
 
   def four_colors_from_terminal
@@ -96,7 +97,7 @@ class Game
     loop do
       @move += 1
       puts display_move_number(@move)
-      sleep(1, 5)
+      sleep(1)
       computer_guess = COLORS.sample(4)
       break if end?(computer_guess)
 
